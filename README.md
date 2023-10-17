@@ -1,4 +1,7 @@
 # django-request-logger
+![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green)
+![PyPi](https://img.shields.io/badge/pypi-3775A9?style=for-the-badge&logo=pypi&logoColor=white)
 
 ## Overview
 'django-request-logger' is a Django package designed to capture and store HTTP requests essential information, including IP address, user model, user agent, HTTP method, timestamp, and more.
