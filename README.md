@@ -6,25 +6,25 @@
 ## Installation
 Install the package using pip:
 ```Shell
-    pip install django-request-track
+pip install django-request-track
 ```
 
 ## Usage
 1. Add request_track to your INSTALLED_APPS in your Django project's settings:
     ```python
-        INSTALLED_APPS = [
+    INSTALLED_APPS = [
         # ...
         'request_track',
         # ...
-        ]
+    ]
     ```
 
 2. Register the middleware in your MIDDLEWARE settings:
     ```python
-        MIDDLEWARE = [
-            # ...
-            'request_track.middleware.LoggingRequestMiddleware'
-        ]
+    MIDDLEWARE = [
+        # ...
+        'request_track.middleware.LoggingRequestMiddleware'
+    ]
     ```
 
 3. Migrate:
