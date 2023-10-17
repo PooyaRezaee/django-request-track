@@ -6,7 +6,7 @@
 ## Installation
 Install the package using pip:
 ```Shell
-    pip install django-request-tracker
+    pip install django-request-track
 ```
 
 ## Usage
