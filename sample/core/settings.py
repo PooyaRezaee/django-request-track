@@ -5,6 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-j9xi$7*_*!*!qgiu=)5*n@)^8hdw2(mvgjqjx_tr)xt5s@+@bb"
 
 DEBUG = True
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -13,7 +14,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "request_track",
 ]
 
@@ -25,7 +25,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     "request_track.middleware.LoggingRequestMiddleware",
 ]
 
@@ -53,7 +52,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -82,3 +81,26 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_URL = "static/"
+
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+CELERY_TASK_SERIALIZER = "msgpack"
+CELERY_ACCEPT_CONTENT = ["msgpack", "json"]
+CELERY_TIMEZONE = "UTC"
+CELERY_ENABLE_UTC = True
+
+# Configs rqeuest_track
+
+REQUEST_TRACK_SETTINGS = {
+    "HEADERS_TO_LOG": ["sec-ch-ua-platform"],
+    "FORCE_PATHS": ["/admin", "/critical-action"],
+    "EXCLUDE_PATHS": ["/admin/jsi18n/"],  # "*"
+    "USER_LOGGING_MODE": "all",  # Values: 'all', 'authenticated', 'anonymous'
+    "SAMPLING_RATE": 1,
+    "FORCE_PATHS_SAMPLING": False,
+    "USE_IP_ADDRESS_MODEL": True,
+    "USE_REDIS_BUFFER": False,
+    "REDIS_KEY": "req_logs",
+    "REDIS_URL": "redis://localhost:6379/2",
+}

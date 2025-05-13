@@ -4,3 +4,7 @@ django_request_track.egg-info/
 .idea/
 venv/
 db.sqlite3
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+todo

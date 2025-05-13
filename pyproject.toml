@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-request-track"
+version = "0.8.0"
+description = "A Django package to track requests with optional Redis and Celery support."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "PooyaRezaee", email = "pooya.rezaee.official@gmail.com" }
+]
+dependencies = [
+    "Django >=5.0.0",
+    "redis",
+    "celery",
+    "msgpack"
+]
+keywords = ["django", "middleware", "request", "logging", "redis", "celery"]
+classifiers = [
+    "Framework :: Django",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/PooyaRezaee/django-request-track"
+Repository = "https://github.com/PooyaRezaee/django-request-track"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "tox",
+    "flake8"
+]

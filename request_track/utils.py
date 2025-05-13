@@ -1,17 +1,22 @@
-from .models import IpAddress
+"""
+Utility functions for request logging.
+"""
 
-def get_ip_address(request):
+from django.http import HttpRequest
+
+
+def get_ip_address(request: HttpRequest) -> str:
+    """
+    Extract client IP address from request, handling proxy headers.
+
+    Args:
+        request: The Django HttpRequest object
+
+    Returns:
+        String containing the client IP address
+    """
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    
     if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
-    else:
-        ip = request.META.get("REMOTE_ADDR")
+        return x_forwarded_for.split(",")[0].strip()
 
-    return ip
-
-def get_or_create_object_ip(ip):
-    if IpAddress.objects.filter(ip=ip).exists():
-        return IpAddress.objects.get(ip=ip)
-    else:
-        return IpAddress.objects.create(ip=ip)
+    return request.META.get("REMOTE_ADDR", "")

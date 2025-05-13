@@ -1,0 +1,131 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_list %}
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .maintenance-panel {
+      margin: 20px 0;
+      padding: 20px;
+      background-color: var(--body-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .maintenance-panel h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: var(--body-fg);
+    }
+
+    .maintenance-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .maintenance-action {
+      background-color: var(--primary);
+      border: none;
+      border-radius: 4px;
+      color: var(--button-fg);
+      cursor: pointer;
+      padding: 10px 15px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .maintenance-action:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .maintenance-warning {
+      color: var(--error-fg);
+      background-color: var(--error-bg);
+      border: 1px solid var(--error-border);
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+
+    .keep-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .keep-form input[type="number"] {
+      width: 100px;
+      padding: 8px;
+      background-color: var(--input-bg);
+      color: var(--input-fg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .keep-form label {
+      color: var(--body-fg);
+    }
+  </style>
+{% endblock %}
+
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; <a href="{% url 'admin:request_track_requestlog_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+&rsaquo; {% translate 'Maintenance' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <h1>{% translate 'Request Log Maintenance' %}</h1>
+
+  <div class="maintenance-panel">
+    <h2>{% translate 'Current Status' %}</h2>
+    <p>{% translate 'Total request logs:' %} <strong>{{ log_count }}</strong></p>
+  </div>
+
+  <div class="maintenance-panel">
+    <h2>{% translate 'Cleanup Options' %}</h2>
+    
+    <div class="maintenance-warning">
+      {% translate 'Warning: These actions cannot be undone. Please make sure you have backups if needed.' %}
+    </div>
+    
+    <div class="maintenance-actions">
+      <a href="{% url 'admin:requestlog-remove-week' %}" class="maintenance-action" 
+         onclick="return confirm('{% translate 'Are you sure you want to delete all logs older than one week?' %}')">
+        {% translate 'Remove logs older than 1 week' %}
+      </a>
+      
+      <a href="{% url 'admin:requestlog-remove-month' %}" class="maintenance-action"
+         onclick="return confirm('{% translate 'Are you sure you want to delete all logs older than one month?' %}')">
+        {% translate 'Remove logs older than 1 month' %}
+      </a>
+    </div>
+    
+    <h3>{% translate 'Keep only the most recent logs' %}</h3>
+    <form action="{% url 'admin:requestlog-keep-last-n' %}" method="get" class="keep-form">
+      <label for="n">{% translate 'Number of logs to keep:' %}</label>
+      <input type="number" name="n" id="n" min="100" value="1000" step="100">
+      <button type="submit" class="maintenance-action"
+              onclick="return confirm('{% translate 'Are you sure you want to keep only the most recent logs?' %}')">
+        {% translate 'Keep only' %}
+      </button>
+    </form>
+  </div>
+  
+  <div class="maintenance-panel">
+    <h2>{% translate 'Return to' %}</h2>
+    <div class="maintenance-actions">
+      <a href="{% url 'admin:request_track_requestlog_changelist' %}" class="maintenance-action">
+        {% translate 'Request Logs List' %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

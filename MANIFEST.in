@@ -1,3 +1,11 @@
 include LICENSE
 include README.md
-recursive-include request_track/migrations *
+include pyproject.toml
+include setup.py
+recursive-include request_track *.py
+recursive-include request_track/templates *
+recursive-include request_track/static *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[cod]
+recursive-exclude * *.so
+recursive-exclude * .DS_Store
