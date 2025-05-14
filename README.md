@@ -101,8 +101,8 @@ user_logs = RequestLog.objects.filter(user=user)
 # Get logs for a specific IP
 ip_logs = RequestLog.objects.filter(ip_address='192.168.1.1')
 ```
-
 ### Using Redis Buffer with Celery
+
 For production environments, it's recommended to use Redis as a buffer with Celery for batch processing:
 
 ```python
@@ -114,19 +114,57 @@ REQUEST_TRACK_SETTINGS = {
 ```
 
 This configuration will:
-1. Store logs in Redis temporarily
+
+1. Store logs temporarily in Redis
 2. Process logs in batches using Celery
 3. Reduce database load
 4. Improve application performance
+
+---
+
+### Setting Up Celery Beat for Periodic Log Processing
+
+To enable periodic processing of buffered logs, you need to configure [Celery Beat](https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html). This allows `request_track.tasks.process_request_logs` to run at fixed intervals.
+
+#### Requirements
+
+Install the following packages:
+
+```bash
+pip install celery redis msgpack
+```
+
+#### Configuration
+
+In your project's `celery.py` file, add the following:
+
+```python
+from datetime import timedelta
+
+app.conf.beat_schedule = {
+    'flush-request-logs-every-interval': {
+        'task': 'request_track.tasks.process_request_logs',
+        'schedule': timedelta(seconds=10),  # adjust as needed
+    },
+}
+```
+
+Make sure the task name is exactly as shown above.
+
+#### Running Celery and Celery Beat
+
+You must start both the Celery worker and the beat scheduler:
+
+```bash
+# Start the Celery worker
+celery -A your_project_name worker --loglevel=info
+
+# Start Celery Beat
+celery -A your_project_name beat --loglevel=info
+```
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Author
-- PooyaRezaee (pooya.rezaee.official@gmail.com)
-
-## Support
-If you encounter any issues or have questions, please open an issue on GitHub.

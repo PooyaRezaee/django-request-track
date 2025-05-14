@@ -1,10 +1,6 @@
 """
 Celery tasks for processing request logs from Redis buffer.
 """
-
-from django.conf import settings
-
-import redis
 import msgpack
 from celery import shared_task
 
